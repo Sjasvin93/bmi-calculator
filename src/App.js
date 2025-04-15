@@ -8,26 +8,33 @@ function App() {
   const [message, setMessage] = useState("");
 
   const calculateBMI = (e) => {
+    const numericWeight = parseFloat(weight);
+    const numericHeight = parseFloat(height);
+
     e.preventDefault();
-    if (height === 0 || weight === 0) {
-      alert("Height and Weight cannot be 0")
+    if (numericHeight === 0 || numericWeight === 0 || isNaN(numericHeight) || isNaN(numericWeight)) {
+      alert("Height and Weight cannot be 0 or empty");
     } else {
       let bmi;
 
-      bmi = weight / (height * height) * 703;
+      bmi = numericWeight / (numericHeight * numericHeight) * 703;
 
       setBmi(bmi);
 
       if (bmi < 25) {
-        setMessage("You are under weight");
+        setMessage(formMessageWithTailwindCss({ tag: 'h3', message: 'You are under weight', css: 'text-lg text-yellow-600' }));
       }
-
       else if (bmi >= 25 && bmi <= 30) {
-        setMessage("You are healthy");
+        setMessage(formMessageWithTailwindCss({ tag: 'h3', message: 'You are healthy', css: 'text-lg text-green-600' }));
       } else {
-        setMessage("You are over weight");
+        setMessage(formMessageWithTailwindCss({ tag: 'h3', message: 'You are over weight', css: 'text-lg text-red-600' }))
       }
     }
+  }
+
+  const formMessageWithTailwindCss = ({ tag, message, css }) => {
+    const TagName = tag;
+    return <TagName className={css}>{message}</TagName>;
   }
 
   const reset = () => {
@@ -62,7 +69,7 @@ function App() {
             />
           </div>
           <div className="flex justify-between mb-4">
-          <button
+            <button
               className="border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white font-bold py-2 px-4 rounded-lg transition"
               onClick={reset}
               type="button"
@@ -78,7 +85,7 @@ function App() {
           </div>
           <div className="text-center">
             <h3 className="text-xl font-semibold mb-2">Your BMI is: {bmi.toFixed(2)}</h3>
-            <h3 className="text-lg text-gray-700">{message}</h3>
+            {message}
           </div>
         </form>
       </div>
